@@ -138,7 +138,6 @@ export default function Page() {
   const [tokenResult, setTokenResult] = useState(null);
 
   const [callbackLog, setCallbackLog] = useState([]);
-  const [polling, setPolling] = useState(false);
 
   const callbackUrl = deployedUrl
     ? `${deployedUrl.replace(/\/$/, "")}/api/oauth/token-update`
@@ -160,12 +159,6 @@ export default function Page() {
     }
   }, []);
 
-  useEffect(() => {
-    if (!polling) return;
-    const id = setInterval(fetchLog, 3000);
-    return () => clearInterval(id);
-  }, [polling, fetchLog]);
-
   async function generateToken() {
     setGenerating(true);
     setTokenResult(null);
@@ -182,10 +175,6 @@ export default function Page() {
       });
       const data = await res.json();
       setTokenResult(data);
-      if (useCallbackMode) {
-        setPolling(true);
-        setTimeout(() => setPolling(false), 60000);
-      }
     } catch (err) {
       setTokenResult({ error: err.message });
     } finally {
@@ -246,27 +235,6 @@ export default function Page() {
           <div style={{ fontSize: "12px", color: "#555" }}>
             OAuth Callback Tester
           </div>
-        </div>
-        <div
-          style={{
-            marginLeft: "auto",
-            display: "flex",
-            gap: "8px",
-            alignItems: "center",
-          }}
-        >
-          <div
-            style={{
-              width: "8px",
-              height: "8px",
-              borderRadius: "50%",
-              background: polling ? "#0f3" : "#333",
-              boxShadow: polling ? "0 0 6px #0f3" : "none",
-            }}
-          />
-          <span style={{ fontSize: "12px", color: "#555" }}>
-            {polling ? "Listening for callbacks..." : "Idle"}
-          </span>
         </div>
       </div>
 
@@ -449,21 +417,6 @@ export default function Page() {
                   }}
                 >
                   ↻ Refresh
-                </button>
-                <button
-                  onClick={() => setPolling((p) => !p)}
-                  style={{
-                    padding: "6px 14px",
-                    borderRadius: "5px",
-                    border: "1px solid",
-                    borderColor: polling ? "#0f3" : "#2a2a2a",
-                    background: polling ? "rgba(0,255,51,0.06)" : "#111",
-                    color: polling ? "#0f3" : "#aaa",
-                    fontSize: "12px",
-                    cursor: "pointer",
-                  }}
-                >
-                  {polling ? "⏸ Stop" : "▶ Auto-poll"}
                 </button>
               </div>
               {callbackLog.length > 0 && (
