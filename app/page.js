@@ -1,7 +1,7 @@
 "use client";
 import { useState, useEffect, useCallback } from "react";
 
-const DEFAULT_ENDPOINT = "https://auth-uat.reportzero.net/api/oauth/token";
+const DEFAULT_ENDPOINT = "https://auth-dev.reportzero.net/api/oauth/token";
 
 function StatusBadge({ status }) {
   const ok = status >= 200 && status < 300;
