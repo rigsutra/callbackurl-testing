@@ -281,7 +281,7 @@ export default function Page() {
         }}
       >
         {/* LEFT COLUMN - Config & Token Generation */}
-        <div>
+        <div style={{ minWidth: 0 }}>
           <Section title="Configuration" accent="#4af">
             <Field
               label="Client ID"
@@ -425,7 +425,7 @@ export default function Page() {
         </div>
 
         {/* RIGHT COLUMN - Callback Log */}
-        <div>
+        <div style={{ minWidth: 0 }}>
           <Section title="Callback Log" accent="#0f3">
             <div
               style={{
