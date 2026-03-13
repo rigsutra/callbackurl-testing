@@ -8,10 +8,11 @@ export async function POST(request) {
 
     console.log('[Callback Received]', JSON.stringify(body, null, 2));
 
-    // Accept both camelCase and snake_case field names
-    const accessToken = body.accessToken || body.access_token;
-    const expiresIn = body.expiresIn ?? body.expires_in;
-    const expiresAt = body.expiresAt || body.expires_at;
+    // Payload may be nested under `data` or flat
+    const payload = body.data || body;
+    const accessToken = payload.accessToken || payload.access_token;
+    const expiresIn = payload.expiresIn ?? payload.expires_in;
+    const expiresAt = payload.expiresAt || payload.expires_at;
 
     if (!accessToken) {
       return Response.json(
